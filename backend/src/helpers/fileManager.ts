@@ -1,15 +1,20 @@
-const pathData  = path.resolve('data', 'tasks.json')
-import path from 'node:path';
 import fs from 'node:fs/promises';
 
-import { Task } from '../models/task.model.js';
-
-export async function getTasks(): Promise<Task[]>  {
-    const dataJson = await fs.readFile(pathData, 'utf-8')
-    return JSON.parse(dataJson) 
+export async function readData<T>(path: string): Promise<T[]> {
+    try {
+        const dataJson = await fs.readFile(path, 'utf-8');
+        try {
+            return JSON.parse(dataJson);
+        } catch {
+            throw new Error(`Corrupted JSON at: ${path}`);
+        }
+    } catch (error: any) {
+        if (error.code === 'ENOENT') return [];
+        throw error;
+    }
 }
 
-export async function saveTasks(tasks: Task[]): Promise<void>{
-    const stringData = JSON.stringify(tasks, null, 2)
-    return fs.writeFile(pathData, stringData);
-} 
+export async function writeData<T>(path: string, data: T[]): Promise<void> {
+    const stringData = JSON.stringify(data, null, 2);
+    await fs.writeFile(path, stringData);
+}
