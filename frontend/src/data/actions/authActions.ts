@@ -5,14 +5,14 @@ import { loginApi } from '../services/authApi';
 import { createUser } from '../services/userApi';
 import { UserRequest } from '@/types/user';
 
-export const actionLogin = async (username: string, password: string) => {
+export const actionLogin = async (user : UserRequest) => {
     try {
-        const session = await loginApi(username, password);
+        const session = await loginApi(user);
         const cookieStore = await cookies();
         cookieStore.set('session', JSON.stringify(session), {
             httpOnly: true,
             path: '/',
-            maxAge: 60 * 60 * 24 * 7, // 7 días
+            maxAge: 60 * 60 * 24 * 7, 
         });
     } catch (error) {
         return { success: false, error: 'Credenciales inválidas' };

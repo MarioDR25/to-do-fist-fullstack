@@ -4,6 +4,7 @@ import { UserRequest } from "@/types/user";
 import { faArrowRightToBracket, faKeyboard } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useState } from "react";
+import { FcGoogle } from "react-icons/fc";
 
 type MyChangeEvent = React.ChangeEvent<HTMLInputElement>;
 type MySubmitEvent = React.SubmitEvent<HTMLFormElement>;
@@ -24,7 +25,7 @@ const Login = () => {
         setLoading(true);
         const result = register
             ? await actionRegister(formData)
-            : await actionLogin(formData.username, formData.password);
+            : await actionLogin(formData);
         if (result?.success === false) {
             setError(result.error || 'Ocurrió un error');
         }
@@ -85,6 +86,12 @@ const Login = () => {
                     >
                         {register ? 'Ya tengo cuenta' : 'Registrarse'}
                     </span>
+
+                    <div className="flex gap-2 items-center bg-slate-200 p-1 rounded-lg hover:bg-slate-100 cursor-pointer">
+                        <FcGoogle size={20}/>
+                        <button className="border-l px-2 cursor-pointer">Ingresa con Google</button>
+                    </div>
+
                 </div>
             </form>
         </div>
